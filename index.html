@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#121212">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<title>Saga de Billy</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header id="app-header">
+  <h1 id="header-title">Saga de Billy</h1>
+</header>
+
+<main id="app-main">
+
+  <section class="view active" id="view-character" data-view="character">
+    <div class="segmented" data-group="character">
+      <button class="seg-btn active" data-seg="perso">Personnage</button>
+      <button class="seg-btn" data-seg="progression">Progression</button>
+    </div>
+
+    <div class="seg-panel active" data-seg-panel="perso">
+      <div class="card">
+        <div class="card-head">
+          <h2>Caractère</h2>
+          <button class="btn btn-small btn-danger" id="reset-character-btn">Nouveau personnage</button>
+        </div>
+        <textarea id="caractere-text" class="textarea-input" placeholder="Nom, description de ton Billy..."></textarea>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Objets de départ (3 au choix)</h2>
+          <span id="items-count" class="items-count">0/3</span>
+        </div>
+        <div id="items-picker"></div>
+        <div id="classe-readout" class="classe-readout"></div>
+      </div>
+
+      <div class="primary-stats-grid">
+        <div class="primary-stat-card" data-stat="habilite">
+          <div class="ps-head"><span class="ps-name">Habilité</span><span class="ps-total" data-role="total">2</span></div>
+          <div class="ps-rows">
+            <div class="ps-row"><span class="ps-label">Base</span><div class="ps-stepper"><button class="mini-btn" data-field="base" data-delta="-1">-</button><span data-role="base">2</span><button class="mini-btn" data-field="base" data-delta="1">+</button></div></div>
+            <div class="ps-row ps-row-readonly"><span class="ps-label">Carac.</span><span data-role="carac">0</span></div>
+            <div class="ps-row ps-row-readonly"><span class="ps-label">Matériel</span><span data-role="materiel">0</span></div>
+          </div>
+          <div class="ps-bonus">
+            <div class="ps-bonus-label">+1 bonus permanents (objets trouvés, événements)</div>
+            <div class="stat-boxes" data-role="bonus-boxes"></div>
+          </div>
+        </div>
+
+        <div class="primary-stat-card" data-stat="adresse">
+          <div class="ps-head"><span class="ps-name">Adresse <span class="ps-cap">(plafond 5)</span></span><span class="ps-total" data-role="total">1</span></div>
+          <div class="ps-rows">
+            <div class="ps-row"><span class="ps-label">Base</span><div class="ps-stepper"><button class="mini-btn" data-field="base" data-delta="-1">-</button><span data-role="base">1</span><button class="mini-btn" data-field="base" data-delta="1">+</button></div></div>
+            <div class="ps-row ps-row-readonly"><span class="ps-label">Carac.</span><span data-role="carac">0</span></div>
+            <div class="ps-row ps-row-readonly"><span class="ps-label">Matériel</span><span data-role="materiel">0</span></div>
+          </div>
+          <div class="ps-bonus">
+            <div class="ps-bonus-label">+1 bonus permanents</div>
+            <div class="stat-boxes" data-role="bonus-boxes"></div>
+          </div>
+        </div>
+
+        <div class="primary-stat-card" data-stat="endurance">
+          <div class="ps-head"><span class="ps-name">Endurance</span><span class="ps-total" data-role="total">2</span></div>
+          <div class="ps-rows">
+            <div class="ps-row"><span class="ps-label">Base</span><div class="ps-stepper"><button class="mini-btn" data-field="base" data-delta="-1">-</button><span data-role="base">2</span><button class="mini-btn" data-field="base" data-delta="1">+</button></div></div>
+            <div class="ps-row ps-row-readonly"><span class="ps-label">Carac.</span><span data-role="carac">0</span></div>
+            <div class="ps-row ps-row-readonly"><span class="ps-label">Matériel</span><span data-role="materiel">0</span></div>
+          </div>
+          <div class="ps-bonus">
+            <div class="ps-bonus-label">+1 bonus permanents</div>
+            <div class="stat-boxes" data-role="bonus-boxes"></div>
+          </div>
+        </div>
+
+        <div class="primary-stat-card" data-stat="chance">
+          <div class="ps-head"><span class="ps-name">Chance</span><span class="ps-total" data-role="total">3</span></div>
+          <div class="ps-rows">
+            <div class="ps-row"><span class="ps-label">Base</span><div class="ps-stepper"><button class="mini-btn" data-field="base" data-delta="-1">-</button><span data-role="base">3</span><button class="mini-btn" data-field="base" data-delta="1">+</button></div></div>
+            <div class="ps-row ps-row-readonly"><span class="ps-label">Carac.</span><span data-role="carac">0</span></div>
+            <div class="ps-row ps-row-readonly"><span class="ps-label">Matériel</span><span data-role="materiel">0</span></div>
+          </div>
+          <div class="ps-bonus">
+            <div class="ps-bonus-label">+1 bonus permanents</div>
+            <div class="stat-boxes" data-role="bonus-boxes"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Statistiques secondaires</h2></div>
+        <p class="hint">Partie manuelle (bonus trouvés en jeu) + partie équipement (auto, selon tes 3 objets).</p>
+        <div class="secondary-grid">
+          <div class="secondary-row" data-sec="degats"><span class="sec-label">Dégâts</span><div class="ps-stepper"><button class="mini-btn" data-delta="-1">-</button><span data-role="val">0</span><button class="mini-btn" data-delta="1">+</button></div><span class="sec-total" data-role="total"></span></div>
+          <div class="secondary-row" data-sec="armure"><span class="sec-label">Armure</span><div class="ps-stepper"><button class="mini-btn" data-delta="-1">-</button><span data-role="val">0</span><button class="mini-btn" data-delta="1">+</button></div><span class="sec-total" data-role="total"></span></div>
+          <div class="secondary-row" data-sec="critique"><span class="sec-label">Critique</span><div class="ps-stepper"><button class="mini-btn" data-delta="-1">-</button><span data-role="val">0</span><button class="mini-btn" data-delta="1">+</button></div><span class="sec-total" data-role="total"></span></div>
+        </div>
+        <div class="pvmax-block">
+          <div class="ps-row"><span class="ps-label">PV Max (base)</span><div class="ps-stepper"><button class="mini-btn" data-delta="-1" data-sec="pvMaxBase">-</button><span data-role="pvMaxBase">0</span><button class="mini-btn" data-delta="1" data-sec="pvMaxBase">+</button></div></div>
+          <div class="ps-bonus">
+            <div class="ps-bonus-label">+1 bonus PV Max permanents</div>
+            <div class="stat-boxes" data-role="pvmax-bonus-boxes"></div>
+          </div>
+          <div class="ps-head"><span class="ps-name">PV Max total</span><span class="ps-total" data-role="pvmax-total">0</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Suivi en jeu</h2></div>
+        <div class="suivi-block">
+          <div class="suivi-label">PV actuels <span data-role="suivi-pv-label" class="suivi-max"></span></div>
+          <div class="stat-boxes" id="suivi-pv-boxes"></div>
+        </div>
+        <div class="suivi-block">
+          <div class="suivi-label">Chance actuelle <span data-role="suivi-chance-label" class="suivi-max"></span></div>
+          <div class="stat-boxes" id="suivi-chance-boxes"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Gloire &amp; Richesse</h2></div>
+        <div class="suivi-block">
+          <div class="suivi-label">Gloire</div>
+          <div class="stat-boxes" id="gloire-boxes"></div>
+          <div class="tally-ctrl"><button class="mini-btn" id="gloire-max-dec">-</button><span id="gloire-max-value">15</span><button class="mini-btn" id="gloire-max-inc">+</button></div>
+        </div>
+        <div class="suivi-block">
+          <div class="suivi-label">Richesse</div>
+          <div class="stat-boxes" id="richesse-boxes"></div>
+          <div class="tally-ctrl"><button class="mini-btn" id="richesse-max-dec">-</button><span id="richesse-max-value">15</span><button class="mini-btn" id="richesse-max-inc">+</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Matériel</h2>
+          <button class="btn btn-small" id="add-item-btn">+ Objet</button>
+        </div>
+        <div id="inventory-list" class="inventory-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Objets récupérés</h2>
+          <button class="btn btn-small" id="add-found-btn">+ Objet</button>
+        </div>
+        <div id="found-list" class="inventory-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Mots-clés &amp; codes</h2>
+          <button class="btn btn-small" id="add-keyword-btn">+ Ajouter</button>
+        </div>
+        <div id="keywords-list" class="keywords-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Notes d'aventure</h2></div>
+        <textarea id="notes-aventure-text" class="textarea-input textarea-tall" placeholder="Choix faits, indices, codes à retenir..."></textarea>
+      </div>
+    </div>
+
+    <div class="seg-panel" data-seg-panel="progression">
+      <div class="card">
+        <div class="card-head"><h2>Sauvegardes</h2></div>
+        <div id="saves-list" class="saves-list"></div>
+      </div>
+
+      <div class="card">
+        <button id="death-btn" class="btn btn-danger btn-full">💀 Je suis mort — recharger la dernière sauvegarde</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-dice" data-view="dice">
+    <div class="card">
+      <div class="card-head"><h2>Lanceur de dés</h2></div>
+      <div class="dice-config">
+        <label>Nombre
+          <input type="number" id="dice-count" min="1" max="20" value="1">
+        </label>
+        <label>Dé
+          <select id="dice-type">
+            <option value="4">d4</option>
+            <option value="6" selected>d6</option>
+            <option value="8">d8</option>
+            <option value="10">d10</option>
+            <option value="12">d12</option>
+            <option value="20">d20</option>
+            <option value="100">d100</option>
+          </select>
+        </label>
+        <label>Modif.
+          <input type="number" id="dice-modifier" value="0">
+        </label>
+      </div>
+      <button id="roll-btn" class="btn btn-accent btn-full btn-roll">🎲 Lancer</button>
+      <div id="dice-result" class="dice-result"></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <h2>Historique</h2>
+        <button class="btn btn-small" id="clear-dice-history-btn">Effacer</button>
+      </div>
+      <div id="dice-history" class="dice-history"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-combat" data-view="combat">
+    <div class="card">
+      <div class="card-head">
+        <h2>Ennemi</h2>
+        <button class="btn btn-small btn-danger" id="reset-combat-btn">Nouveau combat</button>
+      </div>
+      <input type="text" id="enemy-name" placeholder="Nom de l'ennemi" class="text-input">
+      <div class="card-head" style="margin-top:10px;">
+        <h3>Stats ennemi</h3>
+        <button class="btn btn-small" id="add-enemy-stat-btn">+ Stat</button>
+      </div>
+      <div id="enemy-stats-list" class="stats-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Tour de combat (règles Billy)</h2></div>
+      <p class="hint">Jet d'attaque automatique. Si ADRESSE ≥ 2 (lue sur ta feuille de perso), jet d'esquive en plus : réussite si le dé ≤ ADRESSE, contre-attaque critique si le dé fait 1. Les dégâts précis restent à lire dans la Table des situations du livre.</p>
+      <button id="billy-turn-btn" class="btn btn-accent btn-full">▶ Résoudre un tour</button>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Formule de combat / aide-mémoire</h2></div>
+      <textarea id="combat-formula" class="textarea-input" placeholder="Note ici la Table des situations ou toute règle complémentaire..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Jets libres</h2></div>
+      <div class="combat-rolls">
+        <button class="btn btn-accent" id="roll-player-btn">🎲 Jet Joueur</button>
+        <button class="btn btn-accent" id="roll-enemy-btn">🎲 Jet Ennemi</button>
+      </div>
+      <div id="combat-roll-result" class="dice-result"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Journal du combat</h2></div>
+      <div class="combat-note-row">
+        <input type="text" id="combat-note-input" class="text-input" placeholder="Ajouter une note...">
+        <button class="btn btn-small" id="add-combat-note-btn">Ajouter</button>
+      </div>
+      <div id="combat-log" class="combat-log"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-notes" data-view="notes">
+    <div class="segmented" data-group="notes">
+      <button class="seg-btn active" data-seg="notes">Notes</button>
+      <button class="seg-btn" data-seg="regles">Règles</button>
+      <button class="seg-btn" data-seg="data">Sauvegarde</button>
+    </div>
+
+    <div class="seg-panel active" data-seg-panel="notes">
+      <div class="card">
+        <div class="card-head"><h2>Notes libres</h2></div>
+        <textarea id="notes-free" class="textarea-input textarea-tall" placeholder="Tes notes personnelles..."></textarea>
+      </div>
+    </div>
+
+    <div class="seg-panel" data-seg-panel="regles">
+      <div class="card">
+        <div class="card-head"><h2>Aide-mémoire des règles</h2></div>
+        <textarea id="notes-rules" class="textarea-input textarea-tall" placeholder="Ton résumé des règles du livre..."></textarea>
+      </div>
+    </div>
+
+    <div class="seg-panel" data-seg-panel="data">
+      <div class="card">
+        <div class="card-head"><h2>Export / Import complet</h2></div>
+        <p class="hint">Exporte tout (personnage, dés, combat, notes, sauvegardes) dans un fichier JSON pour sauvegarder ou changer de téléphone.</p>
+        <button id="export-btn" class="btn btn-accent btn-full">⬇ Exporter tout (JSON)</button>
+        <button id="import-btn" class="btn btn-full">⬆ Importer un fichier JSON</button>
+        <input type="file" id="import-file-input" accept="application/json" hidden>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<nav id="tab-bar">
+  <button class="tab-btn active" data-view="character"><span class="tab-icon">🧙</span><span class="tab-label">Perso</span></button>
+  <button class="tab-btn" data-view="dice"><span class="tab-icon">🎲</span><span class="tab-label">Dés</span></button>
+  <button class="tab-btn" data-view="combat"><span class="tab-icon">⚔️</span><span class="tab-label">Combat</span></button>
+  <button class="tab-btn" data-view="notes"><span class="tab-icon">📝</span><span class="tab-label">Notes</span></button>
+</nav>
+
+<div id="modal-root"></div>
+<div id="toast" class="toast"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
